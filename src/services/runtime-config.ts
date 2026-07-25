@@ -3,6 +3,7 @@ import { invokeTauri } from './tauri-bridge';
 
 export type RuntimeSecretKey =
   | 'GROQ_API_KEY'
+  | 'ATLASCLOUD_API_KEY'
   | 'OPENROUTER_API_KEY'
   | 'EXA_API_KEYS'
   | 'BRAVE_API_KEYS'
@@ -32,6 +33,7 @@ export type RuntimeSecretKey =
 
 export type RuntimeFeatureId =
   | 'aiGroq'
+  | 'aiAtlasCloud'
   | 'aiOpenRouter'
   | 'stockNewsSearchExa'
   | 'stockNewsSearchBrave'
@@ -82,6 +84,7 @@ const TOGGLES_STORAGE_KEY = 'worldmonitor-runtime-feature-toggles';
 
 const defaultToggles: Record<RuntimeFeatureId, boolean> = {
   aiGroq: true,
+  aiAtlasCloud: true,
   aiOpenRouter: true,
   stockNewsSearchExa: true,
   stockNewsSearchBrave: true,
@@ -122,6 +125,13 @@ export const RUNTIME_FEATURES: RuntimeFeatureDefinition[] = [
     description: 'Primary fast LLM provider used for AI summary generation.',
     requiredSecrets: ['GROQ_API_KEY'],
     fallback: 'Falls back to OpenRouter, then local browser model.',
+  },
+  {
+    id: 'aiAtlasCloud',
+    name: 'Atlas Cloud summarization',
+    description: 'OpenAI-compatible LLM provider via Atlas Cloud unified model API.',
+    requiredSecrets: ['ATLASCLOUD_API_KEY'],
+    fallback: 'Falls back to OpenRouter, Groq, then local browser model.',
   },
   {
     id: 'aiOpenRouter',
